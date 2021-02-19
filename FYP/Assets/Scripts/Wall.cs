@@ -6,11 +6,18 @@ using System.Collections;
 
 public class Wall : MonoBehaviour
 {
-    public Sprite damaged; //Reference of sprite that shows wall has taken damage    public int wallHealth = 5; //Hits required to break wall    private SpriteRenderer sRenderer;    void Awake()
+    public Sprite damaged; //Reference of sprite that shows wall has taken damage
+    public int wallHealth = 5; //Hits required to break wall
+    private SpriteRenderer sRenderer;
+
+    void Awake()
     {
         //Store reference to the SpriteRenderer.
         sRenderer = GetComponent<SpriteRenderer>();
-    }    //Track times wall is hit    public void WallDamaged(int broken)
+    }
+
+    //Track times wall is hit
+    public void WallDamaged(int broken)
     {
         sRenderer.sprite = damaged;
 
