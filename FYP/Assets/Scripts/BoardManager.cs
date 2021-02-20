@@ -33,14 +33,18 @@ public class BoardManager : MonoBehaviour
         //Instantiate Board and set boardHolder to its transform.
         boardHolder = new GameObject("Board").transform;
 
-        //Nested for-loop l to iterate over every cell in 7x7 grid.
+        //Nested for-loop l to iterate over every cell in 7x7 grid.
+
         for (int x = 0; x < columns; x++)
         {
             //Loop along y axis, starting from -1 to place floor or outerwall tiles.
             for (int y = 0; y < rows; y++)
             {
-                gridPositions.Add(new Vector2(x, y), new Vector2(x, y));                GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)]; //Randomly instantiates a floor tile                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject; //Randomly choose co-ordinates for floor tile
-                instance.transform.SetParent(boardHolder); //Floor tile set to child of board holder
+                gridPositions.Add(new Vector2(x, y), new Vector2(x, y));
+                GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)]; //Randomly instantiates a floor tile 
+                GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject; //Randomly choose co-ordinates for floor tile
+                instance.transform.SetParent(boardHolder); //Floor tile set to child of board holder
+
             }
             //A list of possible locations to place tiles.
 
@@ -54,6 +58,9 @@ public class BoardManager : MonoBehaviour
             {
 
             }
+
+            //SetupScene initializes our level and calls the previous functions to lay out the game board
+           
         }
     }
 }
