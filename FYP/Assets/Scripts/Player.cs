@@ -21,7 +21,7 @@ public class Player : MovingObject
 
         //Player's Health
         health = GameManager.instance.playerHealth;
-        healthText.text = "Health: " + health;
+      //  healthText.text = "Health: " + health;
         
         base.Start();   //The Start function of the MovingObject base class is called.
     }
@@ -34,7 +34,24 @@ public class Player : MovingObject
 
         int horizontal = 0;     //Used to store the horizontal move direction.
         int vertical = 0;       //Used to store the vertical move direction.
-                                //Check if we have a non-zero value for horizontal or vertical
+
+
+        //Check if we are running either in the Unity editor or in a standalone build.
+#if UNITY_STANDALONE || UNITY_WEBPLAYER
+			
+			//Get input from the input manager, round it to an integer and store in horizontal to set x axis move direction
+			horizontal = (int) (Input.GetAxisRaw ("Horizontal"));
+			
+			//Get input from the input manager, round it to an integer and store in vertical to set y axis move direction
+			vertical = (int) (Input.GetAxisRaw ("Vertical"));
+			
+			//Check if moving horizontally, if so set vertical to zero.
+			if(horizontal != 0)
+			{
+				vertical = 0;
+			}
+
+#endif      //Check if we have a non-zero value for horizontal or vertical
         if (horizontal != 0 || vertical != 0)
         {
             //Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
@@ -48,7 +65,7 @@ public class Player : MovingObject
         health--;
 
         //Update food text display to reflect current score.
-        healthText.text = "Health: " + health;
+       // healthText.text = "Health: " + health;
 
         //Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
         base.AttemptMove<T>(xDir, yDir);
@@ -80,7 +97,7 @@ public class Player : MovingObject
         health -= loss;
 
         //Update the food display with the new total.
-        healthText.text = "-" + loss + " Health: " + health;
+      //  healthText.text = "-" + loss + " Health: " + health;
 
         //Check to see if game has ended.
         CheckIfGameOver();

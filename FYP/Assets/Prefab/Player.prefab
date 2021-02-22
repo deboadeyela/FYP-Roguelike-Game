@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 5431696382601691092}
   - component: {fileID: 6468797613443026362}
   - component: {fileID: 2862856796875382145}
+  - component: {fileID: 114022726973516418}
   m_Layer: 8
   m_Name: Player
   m_TagString: Player
@@ -92,7 +93,7 @@ Animator:
   m_GameObject: {fileID: 5431696382601691091}
   m_Enabled: 1
   m_Avatar: {fileID: 0}
-  m_Controller: {fileID: 9100000, guid: ac9027712db3a4046b7cbdaf5a32c9d8, type: 2}
+  m_Controller: {fileID: 9100000, guid: ed88edb0ae145440684f0bf998629c0c, type: 2}
   m_CullingMode: 0
   m_UpdateMode: 0
   m_ApplyRootMotion: 0
@@ -148,3 +149,24 @@ Rigidbody2D:
   m_SleepingMode: 1
   m_CollisionDetection: 0
   m_Constraints: 0
+--- !u!114 &114022726973516418
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 5431696382601691091}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ea1f59e19fde3a45be2206bd45292eb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveTime: 0.1
+  blockingLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  restartLevelDelay: 1
+  foodPoints: 10
+  drinkPoints: 20
+  wallDamage: 1
+  healthText: {fileID: 0}
