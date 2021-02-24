@@ -162,7 +162,7 @@ PrefabInstance:
     - target: {fileID: 5431696382601691094, guid: 406216faf8ad93e4d9e09d61778ff74b,
         type: 3}
       propertyPath: m_RootOrder
-      value: 2
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 5431696382601691094, guid: 406216faf8ad93e4d9e09d61778ff74b,
         type: 3}
@@ -192,6 +192,8 @@ GameObject:
   - component: {fileID: 519420032}
   - component: {fileID: 519420031}
   - component: {fileID: 519420029}
+  - component: {fileID: 519420030}
+  - component: {fileID: 519420033}
   m_Layer: 0
   m_Name: Main Camera
   m_TagString: MainCamera
@@ -207,6 +209,23 @@ AudioListener:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 519420028}
   m_Enabled: 1
+--- !u!114 &519420030
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 519420028}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 60b787ea027b772448f20d0f2e0b73dc, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  target: {fileID: 5431696382601691094, guid: 406216faf8ad93e4d9e09d61778ff74b, type: 3}
+  damping: 1
+  lookAheadFactor: 1
+  lookAheadReturnSpeed: 0.5
+  lookAheadMoveThreshold: 0.1
 --- !u!20 &519420031
 Camera:
   m_ObjectHideFlags: 0
@@ -263,74 +282,17 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!1 &818924952
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 818924955}
-  - component: {fileID: 818924954}
-  - component: {fileID: 818924953}
-  m_Layer: 0
-  m_Name: GameManager
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!114 &818924953
+--- !u!114 &519420033
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818924952}
+  m_GameObject: {fileID: 519420028}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: d7a71394a56e25f4cb782dec34835a6a, type: 3}
+  m_Script: {fileID: 11500000, guid: c6c518feb5fd3774690e55040c8808bd, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  columns: 7
-  rows: 7
-  floorTiles:
-  - {fileID: 5667601724365843498, guid: fbc04c94a7116c54caf983f2136af5ae, type: 3}
-  - {fileID: 3801817363892779063, guid: 1e9b6c7a75653804c9adff9d5ad274f7, type: 3}
-  - {fileID: 7708418798659188323, guid: db882a52c44147749b7e3d0cbd1ad93b, type: 3}
-  - {fileID: 5394681787344061389, guid: 6ad0e35129f80c4438da85f4d9b33f66, type: 3}
-  - {fileID: 7632081842022229814, guid: d26a81d340aa10e4ca7d7357426cae85, type: 3}
-  - {fileID: 8119143795977476290, guid: 6cc47d8ce0d0fcc44998b1d77b3cb1de, type: 3}
-  - {fileID: 6423319168035131308, guid: 22e0e5e98f68a5c4a90a1972798cc0e3, type: 3}
-  - {fileID: 5418577342701650594, guid: f9d5b995500c3b843b0dbc6e75492374, type: 3}
---- !u!114 &818924954
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818924952}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e09886bd5342eaf4a859756561afcf5d, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  levelStartDelay: 2
-  turnDelay: 0.1
-  playerHealth: 100
-  playersTurn: 1
---- !u!4 &818924955
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 818924952}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 0}
-  m_RootOrder: 1
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+  gameManager: {fileID: 4382989708291696356, guid: 30c49fa56a84f454089c8b882de3abe1,
+    type: 3}

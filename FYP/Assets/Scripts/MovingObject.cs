@@ -77,7 +77,7 @@ public abstract class MovingObject : MonoBehaviour
         }
     }
 
-    protected virtual void AttemptMove<T>(int xDir, int yDir) where T : Component
+    protected virtual bool AttemptMove<T>(int xDir, int yDir) where T : Component
     {
         //Hit will store whatever our linecast hits when Move is called.
         RaycastHit2D hit;
@@ -87,24 +87,21 @@ public abstract class MovingObject : MonoBehaviour
 
         //Check if nothing was hit by linecast
         if (hit.transform == null)
-            //If nothing was hit, return and don't execute further code.
-            return;
+            //Return true if player hit object
+            return true;
 
         //Get a component reference to the component of type T attached to the object that was hit
         T hitComponent = hit.transform.GetComponent<T>();
 
         //If canMove is false and hitComponent is not equal to null, meaning MovingObject is blocked and has hit something it can interact with.
         if (!canMove && hitComponent != null)
-
             //Call the OnCantMove function and pass it hitComponent as a parameter.
             OnCantMove(hitComponent);
+
+        return false; //returns false when player hasn't hit anything
     }
 
     protected abstract void OnCantMove<T>(T component)
             where T : Component;
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
+    
 }

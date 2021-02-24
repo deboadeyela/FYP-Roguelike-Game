@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using System;
+using System.Collections;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic; 		//Allows use of C# lists
 using Random = UnityEngine.Random; 		//The Unity Engine random number generator.
 
@@ -21,11 +23,11 @@ public class BoardManager : MonoBehaviour
     }
 
     private Transform boardHolder;                                  //A variable to store a reference to the transform of our Board object.
-    public int columns = 7;                                         //# columns in game
-    public int rows = 7;                                            //# rows in game
+    public int columns = 5;                                         //# columns in game
+    public int rows = 5;                                            //# rows in game
     public GameObject[] floorTiles;
     private Dictionary<Vector2, Vector2> gridPositions = new Dictionary<Vector2, Vector2>(); //Dictionary holds list of game references for game tiles
-
+   
 
     //Create GameBoard and add tile references dictionary.
     public void BoardSetup()
@@ -46,21 +48,87 @@ public class BoardManager : MonoBehaviour
                 instance.transform.SetParent(boardHolder); //Floor tile set to child of board holder
 
             }
-            //A list of possible locations to place tiles.
+        }
+    }
+    
 
-            void Start()
+    //SetupScene initializes our level and calls the previous functions to lay out the game board
+    public void addToBoard(int horizontal, int vertical)
+    {
+        if (horizontal == 1)
+        {
+            //Check if tiles exist
+            int x = (int)Player.position.x;
+            int sightX = x + 2;
+            for (x += 1; x <= sightX; x++)
             {
-
+                int y = (int)Player.position.y;
+                int sightY = y + 1;
+                for (y -= 1; y <= sightY; y++)
+                {
+                    addTiles(new Vector2(x, y));
+                }
             }
-
-            // Update is called once per frame
-            void Update()
+        }
+        else if (horizontal == -1)
+        {
+            int x = (int)Player.position.x;
+            int sightX = x - 2;
+            for (x -= 1; x >= sightX; x--)
             {
-
+                int y = (int)Player.position.y;
+                int sightY = y + 1;
+                for (y -= 1; y <= sightY; y++)
+                {
+                    addTiles(new Vector2(x, y));
+                }
             }
+        }
+        else if (vertical == 1)
+        {
+            int y = (int)Player.position.y;
+            int sightY = y + 2;
+            for (y += 1; y <= sightY; y++)
+            {
+                int x = (int)Player.position.x;
+                int sightX = x + 1;
+                for (x -= 1; x <= sightX; x++)
+                {
+                    addTiles(new Vector2(x, y));
+                }
+            }
+        }
+        else if (vertical == -1)
+        {
+            int y = (int)Player.position.y;
+            int sighty = y - 2;
+            for (y -= 1; y >= sighty; y--)
+            {
+                int x = (int)Player.position.x;
+                int sightx = x + 1;
+                for (x -= 1; x <= sightx; x++)
+                {
+                    addTiles(new Vector2(x, y));
+                }
+            }
+        }
+    }
 
-            //SetupScene initializes our level and calls the previous functions to lay out the game board
-           
+
+
+    private void addTiles(Vector2 tileToAdd)
+    {
+        if (!gridPositions.ContainsKey(tileToAdd))
+        {
+            gridPositions.Add(tileToAdd, tileToAdd);
+            GameObject toInstantiate = floorTiles[Random.Range(0,
+           floorTiles.Length)];
+            GameObject instance = Instantiate(toInstantiate, new Vector3
+           (tileToAdd.x, tileToAdd.y, 0f), Quaternion.identity) as GameObject;
+
+            instance.transform.SetParent(boardHolder);
         }
     }
 }
+
+

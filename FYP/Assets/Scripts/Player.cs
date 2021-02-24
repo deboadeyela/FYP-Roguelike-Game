@@ -12,29 +12,31 @@ public class Player : MovingObject
     public Text healthText;						//UI Text display of player health
     private Animator animator;					//Used to store a reference to the Player's animator component.
     private int health;                         //Player health
+    public static Vector2 position;             //Current coordinates of the player
 
     // Start is called before the first frame update
-    void Start()
+    protected override void Start()
     {
         //Get a component reference to the Player's animator component
         animator = GetComponent<Animator>();
 
         //Player's Health
         health = GameManager.instance.playerHealth;
-      //  healthText.text = "Health: " + health;
-        
+        //  healthText.text = "Health: " + health;
+
+        position.x = position.y = 2;    //Player begins game in position (3,3)
         base.Start();   //The Start function of the MovingObject base class is called.
     }
 
     // Update is called once per frame
-    void Update()
+    private void Update()
     {
         //If it's not the player's turn, exit the function.
         if (!GameManager.instance.playersTurn) return;
 
         int horizontal = 0;     //Used to store the horizontal move direction.
         int vertical = 0;       //Used to store the vertical move direction.
-
+        bool canMove = false;   //Used to tell whether plaayer can move or not
 
         //Check if we are running either in the Unity editor or in a standalone build.
 #if UNITY_STANDALONE || UNITY_WEBPLAYER
@@ -54,30 +56,36 @@ public class Player : MovingObject
 #endif      //Check if we have a non-zero value for horizontal or vertical
         if (horizontal != 0 || vertical != 0)
         {
-            //Call AttemptMove passing in the generic parameter Wall, since that is what Player may interact with if they encounter one (by attacking it)
-            //Pass in horizontal and vertical as parameters to specify the direction to move Player in.
-            AttemptMove<Wall>(horizontal, vertical);
+            //Position of player is updated by adding values for horizontal/vertical to the player's x/y movement
+            canMove = AttemptMove<Wall>(horizontal, vertical);
+            if (canMove)
+            {
+                position.x += horizontal;
+                position.y += vertical;
+                GameManager.instance.updateBoard(horizontal, vertical);
+            }
         }
     }
 
-    protected override void AttemptMove<T>(int xDir, int yDir) {
+    protected override bool AttemptMove<T>(int xDir, int yDir) {
         //Every time player moves, subtract from food points total.
-        health--;
+        //health--;
 
         //Update food text display to reflect current score.
-       // healthText.text = "Health: " + health;
+        // healthText.text = "Health: " + health;
 
         //Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
-        base.AttemptMove<T>(xDir, yDir);
-
+        bool hit = base.AttemptMove<T>(xDir, yDir);
+        GameManager.instance.playersTurn = false;
+        return hit;
         //Hit allows us to reference the result of the Linecast done in Move.
-        RaycastHit2D hit;
+        //RaycastHit2D hit;
 
         //Since the player has moved and lost food points, check if the game has ended.
         CheckIfGameOver();
 
         //Set the playersTurn boolean of GameManager to false now that players turn is over.
-        GameManager.instance.playersTurn = false;
+        //GameManager.instance.playersTurn = false;
     }
     protected override void OnCantMove<T>(T component) {
         //Set hitWall to equal the component passed in as a parameter.

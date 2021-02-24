@@ -20,7 +20,7 @@ public class GameManager : MonoBehaviour
     private List<Enemy> enemies;                            //List of all Enemy units, used to issue them move commands.
     private bool enemiesMoving;                             //Boolean to check if enemies are moving.
     private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
-
+   
 
     //Awake is always called before any Start functions
     void Awake()
@@ -138,8 +138,10 @@ public class GameManager : MonoBehaviour
       //  levelImage.SetActive(true);
 
         //Disable this GameManager.
-        enabled = false;
+      //  enabled = false;
     }
+
+   // public void updateBoard(int horizantal, int vertical) { }
 
     //Coroutine to move enemies in sequence.
     IEnumerator MoveEnemies()
@@ -171,6 +173,11 @@ public class GameManager : MonoBehaviour
 
         //Enemies are done moving, set enemiesMoving to false.
         enemiesMoving = false;
+    }
+
+    public void updateBoard(int horizantal, int vertical) {
+        boardScript.addToBoard(horizantal, vertical);
+        
     }
 }
 

@@ -4,12 +4,11 @@ using UnityEngine;
 
 public class Enemy : MovingObject
 {
-    protected override void AttemptMove<T>(int xDir, int yDir) {
-        //Call the AttemptMove function from MovingObject.
-        base.AttemptMove<T>(xDir, yDir);
+    protected override bool AttemptMove<T>(int xDir, int yDir) {
+        return true;
+
 
         
-        //return true;
     }
 
     //Check if enemy has hit wall
