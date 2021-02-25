@@ -5,11 +5,11 @@ using UnityEngine.SceneManagement;
 
 public class Player : MovingObject
 {
-    public float restartLevelDelay = 1f;        //Delay time in seconds to restart level
-    public int foodPoints = 10;                 //Points gained from getting food
-    public int drinkPoints = 20;                //Points gained from getting drink
+   
+    //public int foodPoints = 10;                 //Points gained from getting food
+    //public int drinkPoints = 20;                //Points gained from getting drink
     public int wallDamage = 1;                  //Damage that is done to wall by player hit
-    public Text healthText;						//UI Text display of player health
+  //  public Text healthText;						//UI Text display of player health
     private Animator animator;					//Used to store a reference to the Player's animator component.
     private int health;                         //Player health
     public static Vector2 position;             //Current coordinates of the player
@@ -24,7 +24,7 @@ public class Player : MovingObject
         health = GameManager.instance.playerHealth;
         //  healthText.text = "Health: " + health;
 
-        position.x = position.y = 2;    //Player begins game in position (3,3)
+        position.x = position.y = 2;    //Player begins game in position (2,2)
         base.Start();   //The Start function of the MovingObject base class is called.
     }
 
@@ -67,6 +67,7 @@ public class Player : MovingObject
         }
     }
 
+    //Overrides the AttemptMove function in the MovingObject class 
     protected override bool AttemptMove<T>(int xDir, int yDir) {
         //Every time player moves, subtract from food points total.
         //health--;
@@ -78,15 +79,16 @@ public class Player : MovingObject
         bool hit = base.AttemptMove<T>(xDir, yDir);
         GameManager.instance.playersTurn = false;
         return hit;
-        //Hit allows us to reference the result of the Linecast done in Move.
-        //RaycastHit2D hit;
+        
 
-        //Since the player has moved and lost food points, check if the game has ended.
+        //Since the player has moved and lost health, check if the game has ended.
         CheckIfGameOver();
 
         //Set the playersTurn boolean of GameManager to false now that players turn is over.
         //GameManager.instance.playersTurn = false;
     }
+
+    //Overrides the OnCantMove function in the MovingObject class
     protected override void OnCantMove<T>(T component) {
         //Set hitWall to equal the component passed in as a parameter.
         Wall hitWall = component as Wall;
@@ -97,9 +99,11 @@ public class Player : MovingObject
         //Set the attack trigger of the player's animation controller in order to play the player's attack animation.
         animator.SetTrigger("playerChop");
     }
+
+    //Manage player's health
     public void LoseHealth(int loss) {
         //Set the trigger for the player animator to transition to the playerHit animation.
-        animator.SetTrigger("playerHurt");
+        animator.SetTrigger("playerHit");
 
         //Subtract lost food points from the players total.
         health -= loss;
@@ -110,8 +114,9 @@ public class Player : MovingObject
         //Check to see if game has ended.
         CheckIfGameOver();
     }
+
     private void CheckIfGameOver() {
-        //Check if food point total is less than or equal to zero.
+        //Check if player has no health
         if (health <= 0) {
             //Call the GameOver function of GameManager.
             GameManager.instance.GameOver();

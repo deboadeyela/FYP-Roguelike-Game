@@ -6,23 +6,23 @@ using UnityEngine.UI;
 
 public class GameManager : MonoBehaviour
 {
-    public float levelStartDelay = 2f;                      //Time to wait before starting level, in seconds.
+  
     public float turnDelay = 0.1f;                          //Delay between each Player turn.
-    public int playerHealth = 100;                      //Starting value for Player food points.
+    public int playerHealth = 100;                          //Starting value for Player food points.
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
     [HideInInspector] public bool playersTurn = true;       //Boolean to check if it's players turn, hidden in inspector but public.
 
 
-    private Text levelText;                                 //Text to display current level number.
-  //  private GameObject levelImage;                          //Image to block out level as levels are being set up, background for levelText.
+   //private Text levelText;                                 //Text to display current level number.
     private BoardManager boardScript;                       //Store a reference to our BoardManager which will set up the level.
-   // private int level = 1;                                  //Current level number, expressed in game as "Day 1".
+
     private List<Enemy> enemies;                            //List of all Enemy units, used to issue them move commands.
     private bool enemiesMoving;                             //Boolean to check if enemies are moving.
-    private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
+   // private bool doingSetup = true;                         //Boolean to check if we're setting up board, prevent Player from moving during setup.
    
 
     //Awake is always called before any Start functions
+    //Awake method ensures there is only one GameManager for every scene in game i.e. a singleton
     void Awake()
     {
         //Check if instance already exists
@@ -62,7 +62,7 @@ public class GameManager : MonoBehaviour
     //This is called each time a scene is loaded.
     static private void OnSceneLoaded(Scene arg0, LoadSceneMode arg1)
     {
-        //instance.level++;
+        
         instance.InitGame();
     }
 
@@ -70,23 +70,6 @@ public class GameManager : MonoBehaviour
     //Initializes the game for each level.
     void InitGame()
     {
-        //While doingSetup is true the player can't move, prevent player from moving while title card is up.
-        //doingSetup = true;
-
-        //Get a reference to our image LevelImage by finding it by name.
-       // levelImage = GameObject.Find("LevelImage");
-
-        //Get a reference to our text LevelText's text component by finding it by name and calling GetComponent.
-        //levelText = GameObject.Find("LevelText").GetComponent<Text>();
-
-        //Set the text of levelText to the string "Day" and append the current level number.
-        //levelText.text = "Day " + level;
-
-        //Set levelImage to active blocking player's view of the game board during setup.
-        //levelImage.SetActive(true);
-
-        //Call the HideLevelImage function with a delay in seconds of levelStartDelay.
-        //Invoke("HideLevelImage", levelStartDelay);
 
         //Clear any Enemy objects in our List to prepare for next level.
         enemies.Clear();
@@ -96,21 +79,12 @@ public class GameManager : MonoBehaviour
 
     }
 
-    /*
-    //Hides black image used between levels
-    void HideLevelImage()
-    {
-        //Disable the levelImage gameObject.
-        levelImage.SetActive(false);
-
-        //Set doingSetup to false allowing player to move again.
-        doingSetup = false;
-    }*/
+  
 
     //Update is called every frame.
     void Update()
     {
-        //Check that playersTurn or enemiesMoving or doingSetup are not currently true.
+        //Check that playersTurn or enemiesMoving are not currently true.
         if (playersTurn || enemiesMoving)
 
             //If any of these are true, return and do not start MoveEnemies.
@@ -128,14 +102,10 @@ public class GameManager : MonoBehaviour
     }
 
 
-    //GameOver is called when the player reaches 0 food points
+    //GameOver is called when the player is dead
     public void GameOver()
     {
-        //Set levelText to display number of levels passed and game over message
-       // levelText.text = "After " + level + " days, you starved.";
-
-        //Enable black background image gameObject.
-      //  levelImage.SetActive(true);
+     
 
         //Disable this GameManager.
       //  enabled = false;

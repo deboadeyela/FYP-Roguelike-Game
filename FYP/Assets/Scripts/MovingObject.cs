@@ -3,7 +3,7 @@ using System.Collections;
 
 public abstract class MovingObject : MonoBehaviour
 {
-    public float moveTime = 0.1f;           //Time it will take object to move, in seconds.
+    public float moveTime = 0.1f;           //Used to time player's movements
     public LayerMask blockingLayer;         //Layer on which collision will be checked.
 
 
@@ -24,6 +24,7 @@ public abstract class MovingObject : MonoBehaviour
         inverseMoveTime = 1f / moveTime;
     }
 
+    //Method checks whether the player can move in the direction they have input
     protected bool Move(int xDir, int yDir, out RaycastHit2D hit) {
         //Store start position to move from, based on objects current transform position.
         Vector2 start = transform.position;
@@ -53,9 +54,9 @@ public abstract class MovingObject : MonoBehaviour
         //If something was hit, return false, Move was unsuccesful.
         return false;
     }
-    //  }
 
-      protected IEnumerator SmoothMovement(Vector3 end) {
+    //Method for moving units from one tile space to the next
+    protected IEnumerator SmoothMovement(Vector3 end) {
         //Calculate the remaining distance to move based on the square magnitude of the difference between current position and end parameter. 
         //Square magnitude is used instead of magnitude because it's computationally cheaper.
         float sqrRemainingDistance = (transform.position - end).sqrMagnitude;
@@ -77,6 +78,7 @@ public abstract class MovingObject : MonoBehaviour
         }
     }
 
+    //Called by Move() to check whether the player/enemy is being blocked from moving.
     protected virtual bool AttemptMove<T>(int xDir, int yDir) where T : Component
     {
         //Hit will store whatever our linecast hits when Move is called.
@@ -101,6 +103,7 @@ public abstract class MovingObject : MonoBehaviour
         return false; //returns false when player hasn't hit anything
     }
 
+    //Called when player is blocked from moving
     protected abstract void OnCantMove<T>(T component)
             where T : Component;
     

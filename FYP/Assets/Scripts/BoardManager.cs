@@ -25,7 +25,7 @@ public class BoardManager : MonoBehaviour
     private Transform boardHolder;                                  //A variable to store a reference to the transform of our Board object.
     public int columns = 5;                                         //# columns in game
     public int rows = 5;                                            //# rows in game
-    public GameObject[] floorTiles;
+    public GameObject[] floorTiles;                                 //GameObeject for holding floor prefabs
     private Dictionary<Vector2, Vector2> gridPositions = new Dictionary<Vector2, Vector2>(); //Dictionary holds list of game references for game tiles
    
 
@@ -35,15 +35,14 @@ public class BoardManager : MonoBehaviour
         //Instantiate Board and set boardHolder to its transform.
         boardHolder = new GameObject("Board").transform;
 
-        //Nested for-loop l to iterate over every cell in 7x7 grid.
-
+        //Nested for-loop l to iterate over every cell in 5x5 grid.
         for (int x = 0; x < columns; x++)
         {
             //Loop along y axis, starting from -1 to place floor or outerwall tiles.
             for (int y = 0; y < rows; y++)
             {
                 gridPositions.Add(new Vector2(x, y), new Vector2(x, y));
-                GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)]; //Randomly instantiates a floor tile 
+                GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)]; //Randomly instantiates a floor tile from array
                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject; //Randomly choose co-ordinates for floor tile
                 instance.transform.SetParent(boardHolder); //Floor tile set to child of board holder
 
@@ -52,12 +51,13 @@ public class BoardManager : MonoBehaviour
     }
     
 
-    //SetupScene initializes our level and calls the previous functions to lay out the game board
+    //Entry point from GameManager class
     public void addToBoard(int horizontal, int vertical)
     {
+        //IF statement for when player is moving a right
         if (horizontal == 1)
         {
-            //Check if tiles exist
+            //Nested for-loop used to iterate over player's line of sight which is a 2x3 grid
             int x = (int)Player.position.x;
             int sightX = x + 2;
             for (x += 1; x <= sightX; x++)
@@ -70,6 +70,8 @@ public class BoardManager : MonoBehaviour
                 }
             }
         }
+        //ELSE-IF statements used to check other directions player moves in 
+        //And establish line of sight for that direction
         else if (horizontal == -1)
         {
             int x = (int)Player.position.x;
@@ -115,7 +117,8 @@ public class BoardManager : MonoBehaviour
     }
 
 
-
+    //Checks dictionary for line of sight tiles 
+    //If tiles are not in dictionary, they are added
     private void addTiles(Vector2 tileToAdd)
     {
         if (!gridPositions.ContainsKey(tileToAdd))
