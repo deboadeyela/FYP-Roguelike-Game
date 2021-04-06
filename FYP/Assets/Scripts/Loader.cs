@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+//Loader script is responsible for instanitating GameManager class
 public class Loader : MonoBehaviour
 {
     public GameObject gameManager;

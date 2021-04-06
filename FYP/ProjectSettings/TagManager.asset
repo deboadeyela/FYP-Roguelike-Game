@@ -8,6 +8,10 @@ TagManager:
   - Exit
   - Enemy
   - Soda
+  - Item
+  - Weapon
+  - Wall
+  - Chest
   layers:
   - Default
   - TransparentFX
@@ -18,8 +22,8 @@ TagManager:
   - 
   - 
   - BlockingLayer
-  - 
-  - 
+  - Items
+  - Units
   - 
   - 
   - 

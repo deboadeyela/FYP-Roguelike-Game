@@ -1,0 +1,13 @@
+fileFormatVersion: 2
+guid: a1d77ad9f64ba0f4cac79ad7e9252fb1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - glove: {fileID: 21300000, guid: 7fb9fc5a5398aed44be8c24fe1a7437d, type: 3}
+  - boot: {fileID: 21300000, guid: fcb7cbfe22acd6b46b36a387da538f22, type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

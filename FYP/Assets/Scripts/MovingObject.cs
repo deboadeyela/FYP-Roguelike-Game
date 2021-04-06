@@ -7,7 +7,7 @@ public abstract class MovingObject : MonoBehaviour
     public LayerMask blockingLayer;         //Layer on which collision will be checked.
 
 
-    private BoxCollider2D boxCollider;      //The BoxCollider2D component attached to this object.
+    public BoxCollider2D boxCollider;      //The BoxCollider2D component attached to this object.
     private Rigidbody2D rb2D;				//The Rigidbody2D component attached to this object.
     private float inverseMoveTime;			//Used to make movement more efficient.
 
@@ -81,6 +81,14 @@ public abstract class MovingObject : MonoBehaviour
     //Called by Move() to check whether the player/enemy is being blocked from moving.
     protected virtual bool AttemptMove<T>(int xDir, int yDir) where T : Component
     {
+        if (xDir == 1)
+        {
+             transform.eulerAngles = Vector3.zero;
+             }
+        else if (xDir == -1)
+        {
+             transform.eulerAngles = new Vector3(0, 180, 0);
+             }
         //Hit will store whatever our linecast hits when Move is called.
         RaycastHit2D hit;
 

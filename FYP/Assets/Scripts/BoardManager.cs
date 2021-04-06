@@ -27,7 +27,14 @@ public class BoardManager : MonoBehaviour
     public int rows = 5;                                            //# rows in game
     public GameObject[] floorTiles;                                 //GameObeject for holding floor prefabs
     private Dictionary<Vector2, Vector2> gridPositions = new Dictionary<Vector2, Vector2>(); //Dictionary holds list of game references for game tiles
-   
+    public GameObject exit; //Used to hold door sprite for entrance/exit
+    public GameObject[] outerWallTiles; //Used to enclose dungeon
+    private Transform dungeonBoardHolder; //Transform for dictionary
+    private Dictionary<Vector2, Vector2> dungeonGridPositions; //Dictionary for dungeon
+    public GameObject[] wallTiles;
+    public GameObject chestTile;
+    public GameObject enemy;
+
 
     //Create GameBoard and add tile references dictionary.
     public void BoardSetup()
@@ -49,7 +56,15 @@ public class BoardManager : MonoBehaviour
             }
         }
     }
-    
+
+    public bool checkValidTile(Vector2 pos)
+    {
+        if (gridPositions.ContainsKey(pos))
+        {
+            return true;
+        }
+        return false;
+    }
 
     //Entry point from GameManager class
     public void addToBoard(int horizontal, int vertical)
@@ -116,11 +131,10 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-
-    //Checks dictionary for line of sight tiles 
-    //If tiles are not in dictionary, they are added
+    
     private void addTiles(Vector2 tileToAdd)
     {
+        //Checks line of sight tiles and add tiles if they're not there
         if (!gridPositions.ContainsKey(tileToAdd))
         {
             gridPositions.Add(tileToAdd, tileToAdd);
@@ -128,10 +142,96 @@ public class BoardManager : MonoBehaviour
            floorTiles.Length)];
             GameObject instance = Instantiate(toInstantiate, new Vector3
            (tileToAdd.x, tileToAdd.y, 0f), Quaternion.identity) as GameObject;
-
             instance.transform.SetParent(boardHolder);
+            /*
+            if (Random.Range(0, 3) == 1)
+            {
+                toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
+                instance = Instantiate(toInstantiate, new Vector3(tileToAdd.x, tileToAdd.y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(boardHolder);
+            }*/
+            //For every 1 in 100 tiles, an exit tile is spawned 
+            if (Random.Range(0, 100) == 1)
+            {
+                toInstantiate = exit;
+                instance = Instantiate(toInstantiate, new Vector3(tileToAdd.x,
+               tileToAdd.y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(boardHolder);
+            }
+            else if (Random.Range(0, GameManager.instance.enemySpawnRatio) == 1)
+            {
+                toInstantiate = enemy;
+                instance = Instantiate(toInstantiate, new Vector3(tileToAdd.x,
+               tileToAdd.y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(boardHolder);
+            }
         }
     }
+
+    //Applies graphics to dungeon data
+    public void SetDungeonBoard(Dictionary<Vector2, TileType> dungeonTiles, int bound, Vector2 endPos)
+    {
+        boardHolder.gameObject.SetActive(false); //Remove world board by setting it to inactive
+        dungeonBoardHolder = new GameObject("Dungeon").transform;
+        GameObject toInstantiate, instance;
+
+        //Loops through coordinates and place sprite
+        foreach (KeyValuePair<Vector2, TileType> tile in dungeonTiles)
+        {
+            toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)];
+            instance = Instantiate(toInstantiate, new Vector3(tile.Key.x,
+           tile.Key.y, 0f), Quaternion.identity) as GameObject;
+            instance.transform.SetParent(dungeonBoardHolder);
+        
+
+        if (tile.Value == TileType.chest)
+        {
+            toInstantiate = chestTile;
+            instance = Instantiate(toInstantiate, new Vector3(tile.Key.x,tile.Key.y, 0f), Quaternion.identity) as GameObject;
+            instance.transform.SetParent(dungeonBoardHolder);
+        }
+
+            else if (tile.Value == TileType.enemy)
+            {
+                toInstantiate = enemy;
+                instance = Instantiate(toInstantiate, new Vector3(tile.Key.x,
+               tile.Key.y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(dungeonBoardHolder);
+            }
+        }
+
+        //Places outer wall tiles to enclose dungeon
+        for (int x = -1; x < bound + 1; x++)
+        {
+            for (int y = -1; y < bound + 1; y++)
+            {
+                if (!dungeonTiles.ContainsKey(new Vector2(x, y)))
+                {
+                    toInstantiate = outerWallTiles[Random.Range(0,
+                   outerWallTiles.Length)];
+                    instance = Instantiate(toInstantiate, new Vector3(x, y, 0f),
+                   Quaternion.identity) as GameObject;
+                    instance.transform.SetParent(dungeonBoardHolder);
+                }
+            }
+        }
+
+        //Sets exit tiles
+        toInstantiate = exit;
+        instance = Instantiate(toInstantiate, new Vector3(endPos.x,
+       endPos.y, 0f), Quaternion.identity) as GameObject;
+        instance.transform.SetParent(dungeonBoardHolder);
+    }
+
+    //Reactivate World board after exiting dungeon
+    public void SetWorldBoard()
+    {
+        Destroy(dungeonBoardHolder.gameObject);
+        boardHolder.gameObject.SetActive(true);
+    }
+
+
+
 }
 
 

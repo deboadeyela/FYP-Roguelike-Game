@@ -120,4 +120,5 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   damaged: {fileID: 0}
-  wallHealth: 5
+  wallHealth: 1
+  foodTiles: []

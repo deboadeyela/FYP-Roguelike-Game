@@ -165,8 +165,6 @@ MonoBehaviour:
   blockingLayer:
     serializedVersion: 2
     m_Bits: 256
-  restartLevelDelay: 1
-  foodPoints: 10
-  drinkPoints: 20
   wallDamage: 1
-  healthText: {fileID: 0}
+  onWorldBoard: 0
+  dungeonTransition: 0

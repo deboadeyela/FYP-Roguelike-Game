@@ -1,0 +1,14 @@
+fileFormatVersion: 2
+guid: 98a62b2697a34c64ca688c9d1c66adc1
+MonoImporter:
+  externalObjects: {}
+  serializedVersion: 2
+  defaultReferences:
+  - openSprite: {instanceID: 0}
+  - randomArmour: {fileID: 114693847375216828, guid: 4d372abca809ef94c8ee75222cb1cc3b,
+      type: 3}
+  executionOrder: 0
+  icon: {instanceID: 0}
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 
