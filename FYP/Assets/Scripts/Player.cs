@@ -26,7 +26,15 @@ public class Player : MovingObject
 
     private Weapon weapon;
     public Image weaponComp1;
-    public static bool isFacingRight;
+    public static bool isFacingRight;
+    public AudioClip moveSound1;                //1 of 2 Audio clips to play when player moves.
+    public AudioClip moveSound2;                //2 of 2 Audio clips to play when player moves.
+    public AudioClip eatSound1;                 //1 of 2 Audio clips to play when player collects a food object.
+    public AudioClip eatSound2;                 //2 of 2 Audio clips to play when player collects a food object.
+   // public AudioClip drinkSound1;               //1 of 2 Audio clips to play when player collects a soda object.
+   // public AudioClip drinkSound2;               //2 of 2 Audio clips to play when player collects a soda object.
+    public AudioClip gameOverSound;				//Audio clip to play when player dies
+
     // Start is called before the first frame update
     protected override void Start()
     {
@@ -141,6 +149,13 @@ public class Player : MovingObject
 
         //Call the AttemptMove method of the base class, passing in the component T (in this case Wall) and x and y direction to move.
         bool hit = base.AttemptMove<T>(xDir, yDir);
+        RaycastHit2D trust;
+        if (Move(xDir, yDir, out trust))
+        {
+            //Call RandomizeSfx of SoundManager to play the move sound, passing in two audio clips to choose from.
+            SoundManager.instance.RandomizeSfx(moveSound1, moveSound2);
+        }
+
         GameManager.instance.playersTurn = false;
         return hit;
         //Hit allows us to reference the result of the Linecast done in Move.
@@ -211,6 +226,11 @@ public class Player : MovingObject
         //Check if player has no health
         if (health <= 0)
         {
+            //Call the PlaySingle function of SoundManager and pass it the gameOverSound as the audio clip to play.
+            SoundManager.instance.PlaySingle(gameOverSound);
+
+            //Stop the background music.
+            SoundManager.instance.musicSource.Stop();
             //Call the GameOver function of GameManager.
             GameManager.instance.GameOver();
         }
@@ -313,6 +333,7 @@ public class Player : MovingObject
         else if (other.tag == "Food" || other.tag == "Soda")
         {
             UpdateHealth(other);
+            SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
             Destroy(other.gameObject);
         }
         else if (other.tag == "Item")

@@ -127,3 +127,5 @@ MonoBehaviour:
   floorT:
   - {fileID: 5667601724365843498, guid: fbc04c94a7116c54caf983f2136af5ae, type: 3}
   - {fileID: 3801817363892779063, guid: 1e9b6c7a75653804c9adff9d5ad274f7, type: 3}
+  chopSound1: {fileID: 8300000, guid: cfb63ac9bded3e048ac3cef983f99be7, type: 3}
+  chopSound2: {fileID: 8300000, guid: 9969d2f454561ba428cc51e872ce6d57, type: 3}
