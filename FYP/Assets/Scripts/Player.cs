@@ -11,39 +11,60 @@ public class Player : MovingObject
     // public float restartLevelDelay = 1f;        //Delay time in seconds to restart level
     //public int foodPoints = 10;                 //Points gained from getting food
     //public int drinkPoints = 20;                //Points gained from getting drink
-    public int wallDamage = 1;                  //Damage that is done to wall by player hit
-    public Text healthText;						//UI Text display of player health
-    private Animator animator;					//Used to store a reference to the Player's animator component.
-    private int health;                         //Player health
-    public static Vector2 position;             //Current coordinates of the player
+    public int wallDamage = 1; //Damage that is done to wall by player hit
+    public Text healthText; //UI Text display of player health
+    private Animator animator; //Used to store a reference to the Player's animator component.
+    public int health; //Player health
+    public static Vector2 position; //Current coordinates of the player
     public bool onWorldBoard; //Determines if player is on world board in order to then track player's position 
     public bool dungeonTransition; //Switches off movement, to transition dungeon entrance
+    
+    //Image References
     public Image glove;
     public Image boot;
+    //Text refercences for attack/defense ratings
+    public Text attackText;
+    public Text defenceText;
 
-    public int attackMod = 0, defenseMod = 0;
-    private Dictionary<String, Armour> inventory;
-
-    private Weapon weapon;
-    public Image weaponComp1;
+    //Sword Sprites
+    public Sprite steelWeapon;
+    public Sprite goldWeapon;
+    public Sprite diamondWeapon;
+    // public Text gloveText;
+    public int attackMod = 0, defenseMod = 0; //attack/defense ratings
+    //public static Player instance;
+   // private Armour armourScript;
+    private Dictionary<String, Armour> inventory;  //Inventory for armour
+    
+    private Weapon weapon; //Weapon object
+    public Image weaponComp1; //Image for weapon component
     public static bool isFacingRight;
     public AudioClip moveSound1;                //1 of 2 Audio clips to play when player moves.
     public AudioClip moveSound2;                //2 of 2 Audio clips to play when player moves.
     public AudioClip eatSound1;                 //1 of 2 Audio clips to play when player collects a food object.
     public AudioClip eatSound2;                 //2 of 2 Audio clips to play when player collects a food object.
-   // public AudioClip drinkSound1;               //1 of 2 Audio clips to play when player collects a soda object.
-   // public AudioClip drinkSound2;               //2 of 2 Audio clips to play when player collects a soda object.
+    public AudioClip drinkSound1;               //1 of 2 Audio clips to play when player collects a soda object.
+    public AudioClip drinkSound2;               //2 of 2 Audio clips to play when player collects a soda object.
     public AudioClip gameOverSound;				//Audio clip to play when player dies
+    public int c = 0;
 
     // Start is called before the first frame update
     protected override void Start()
     {
         //Get a component reference to the Player's animator component
         animator = GetComponent<Animator>();
-
+        //   armourScript = GameObject.FindGameObjectWithTag("Item").GetComponent<Armour>();
+        //      instance = this;
+        attackText = GameObject.Find("AText").GetComponent<Text>();
+        defenceText = GameObject.Find("DText").GetComponent<Text>();
         //Player's Health
         health = GameManager.instance.playerHealth;
         healthText.text = "Health: " + health;
+        // gloveText.text = "Gloves: x" + gloveCount;
+        attackMod = GameManager.instance.attackRating;
+        defenseMod = GameManager.instance.defenceRating;
+        //attackText.text = "Attack: " + attackMod;
+
         onWorldBoard = true;
         position.x = position.y = 2;    //Player begins game in position (2,2)
         dungeonTransition = false;
@@ -55,6 +76,8 @@ public class Player : MovingObject
     // Update is called once per frame
     private void Update()
     {
+      //  attackText.text = "Attack: " + attackMod;
+      //  attackText.text = "Attack: " + attackMod;
         //If it's not the player's turn, exit the function.
         if (!GameManager.instance.playersTurn) return;
 
@@ -215,7 +238,7 @@ public class Player : MovingObject
         health -= loss;
 
         //Update the food display with the new total.
-          healthText.text = "-" + loss + " Health: " + health;
+          healthText.text = "Damage:-" + loss + " Health: " + health;
 
         //Check to see if game has ended.
         CheckIfGameOver();
@@ -263,18 +286,27 @@ public class Player : MovingObject
             if (item.tag == "Food")
             {
                 health += Random.Range(1, 4);
+                health = Mathf.Clamp(health, 1, 100);
             }
             else
             {
                 health += Random.Range(4, 11); //Value of soda is higher than food 
+                health = Mathf.Clamp(health, 1, 100);
             }
             GameManager.instance.playerHealth = health;
             healthText.text = "Health: " + health;
         }
     }
 
-    private void UpdateInventory(Collider2D armour)
+    //Called when the player picks up a new Armour
+    //Only allowed one item of each type in our inventory
+    //New armour is put into the empty slot in our inventory
+    //If we already have item, we replace it with the new item that was just picked up
+    public void UpdateInventory(Collider2D armour)
     {
+        //attackMod = 12; 
+        //GameManager.instance.attackRating = attackMod;
+        //attackText.text = "Attack: " + attackMod;
         Armour armourData = armour.GetComponent<Armour>();
         switch (armourData.type)
         {
@@ -303,13 +335,74 @@ public class Player : MovingObject
         {
             attackMod += gear.Value.attackMod;
             defenseMod += gear.Value.defenseMod;
+           // GameManager.instance.attackRating = attackMod;
+            //attackText.text = "Attack: " + attackMod;
+
+        }
+        GameManager.instance.attackRating += attackMod;
+        attackText.text = "Attack: " + GameManager.instance.attackRating;
+
+        GameManager.instance.defenceRating += defenseMod;
+        defenceText.text = "Defence: " + GameManager.instance.defenceRating;
+        //  attackText.text = "Attack: " + attackMod;
+      /*  if (weapon)
+        {
+            attackMod = attackMod + 200;
+           // attackMod += 5;
+        }*/
+        //c = attackMod;
+     //   attackText.text = "Attack: " + c; 
+    }
+
+    //Update attack/defence rating based on inventory image sprite
+    private void UpdateWeaponScore() {
+        attackMod = 0;
+        defenseMod = 0;
+
+        if (weaponComp1.sprite == steelWeapon) {
+            Debug.Log("Hello");
+            attackMod += 1;
+            GameManager.instance.attackRating += attackMod;
+            attackText.text = "Attack: " + GameManager.instance.attackRating;
+
+            defenseMod += 1;
+            GameManager.instance.defenceRating += defenseMod;
+            defenceText.text = "Defence: " + GameManager.instance.defenceRating;
+
+            wallDamage += attackMod;
         }
 
-        if (weapon)
-             wallDamage = attackMod + 3;
+        else if (weaponComp1.sprite == goldWeapon)
+        {
+            Debug.Log("Hello");
+            attackMod += 2;
+            GameManager.instance.attackRating += attackMod;
+            attackText.text = "Attack: " + GameManager.instance.attackRating;
+
+            defenseMod += 2;
+            GameManager.instance.defenceRating += defenseMod;
+            defenceText.text = "Defence: " + GameManager.instance.defenceRating;
+
+            wallDamage += attackMod;
+        }
+
+        else if (weaponComp1.sprite == diamondWeapon)
+        {
+            Debug.Log("Hello");
+            attackMod += 3;
+            GameManager.instance.attackRating += attackMod;
+            attackText.text = "Attack: " + GameManager.instance.attackRating;
+
+            defenseMod += 3;
+            GameManager.instance.defenceRating += defenseMod;
+            defenceText.text = "Defence: " + GameManager.instance.defenceRating;
+
+            wallDamage += attackMod;
+        }
 
     }
 
+    //Adjusts enemy Ai based off strength of player
     private void AdaptDifficulty()
     {
         if (wallDamage >= 10)
@@ -330,31 +423,47 @@ public class Player : MovingObject
             Destroy(other.gameObject);
         }
         //Checks if the player collides with health items   
-        else if (other.tag == "Food" || other.tag == "Soda")
+        else if (other.tag == "Food")
         {
             UpdateHealth(other);
             SoundManager.instance.RandomizeSfx(eatSound1, eatSound2);
             Destroy(other.gameObject);
         }
+        else if (other.tag == "Soda") {
+            UpdateHealth(other);
+            SoundManager.instance.RandomizeSfx(drinkSound1, drinkSound2);
+            Destroy(other.gameObject);
+        }
+
+        //Checks if the player collides with armour
         else if (other.tag == "Item")
         {
             UpdateInventory(other);
+               attackText.text = "Attack: " + GameManager.instance.attackRating;
+            defenceText.text = "Defence: " + GameManager.instance.defenceRating;
             Destroy(other.gameObject);
         }
+
+        //Checks if the player collides with weapon
+        //Update score 
+        //Adjust difficulty
         else if (other.tag == "Weapon")
         {
+          
             if (weapon)
             {
                 Destroy(transform.GetChild(0).gameObject);
             }
+            //attackText.text = "Attack: " + GameManager.instance.attackRating;
             other.enabled = false;
             other.transform.parent = transform;
             weapon = other.GetComponent<Weapon>();
             weapon.AcquireWeapon();
             weapon.inPlayerInventory = true;
             weapon.enableSpriteRender(false);
-            wallDamage = attackMod + 3;
+           // wallDamage = attackMod + 3;
             weaponComp1.sprite = weapon.getComponentImage(0);
+            UpdateWeaponScore();
             AdaptDifficulty();
         }
 

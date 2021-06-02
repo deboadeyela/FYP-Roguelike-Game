@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 7836404205114591810}
   - component: {fileID: 1804445687389694536}
   - component: {fileID: 710337102383536905}
+  - component: {fileID: 114526432393285584}
   m_Layer: 8
   m_Name: SecondEnemy
   m_TagString: Enemy
@@ -148,3 +149,23 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
+--- !u!114 &114526432393285584
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7836404205114591813}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 7c21b7250e167694c903c1e210f8f1af, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  moveTime: 0.1
+  blockingLayer:
+    serializedVersion: 2
+    m_Bits: 256
+  boxCollider: {fileID: 0}
+  playerDamage: 5
+  attackSound1: {fileID: 8300000, guid: e5ac8bb56e7784b47873f7b4980028b0, type: 3}
+  attackSound2: {fileID: 8300000, guid: 5229bcee2aec6d843be6a3676f3dc9a1, type: 3}

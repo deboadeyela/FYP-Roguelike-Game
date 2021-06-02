@@ -22,10 +22,10 @@ public class BoardManager : MonoBehaviour
         }
     }
 
-    private Transform boardHolder;                                  //A variable to store a reference to the transform of our Board object.
-    public int columns = 5;                                         //# columns in game
-    public int rows = 5;                                            //# rows in game
-    public GameObject[] floorTiles;                                 //GameObeject for holding floor prefabs
+    private Transform boardHolder; //A variable to store a reference to the transform of our Board object.
+    public int columns = 5; //# columns in game
+    public int rows = 5; //# rows in game
+    public GameObject[] floorTiles; //GameObeject for holding floor prefabs
     private Dictionary<Vector2, Vector2> gridPositions = new Dictionary<Vector2, Vector2>(); //Dictionary holds list of game references for game tiles
     public GameObject exit; //Used to hold door sprite for entrance/exit
     public GameObject[] outerWallTiles; //Used to enclose dungeon
@@ -33,8 +33,9 @@ public class BoardManager : MonoBehaviour
     private Dictionary<Vector2, Vector2> dungeonGridPositions; //Dictionary for dungeon
     public GameObject[] wallTiles;
     public GameObject chestTile;
-    public GameObject enemy;
-
+    public GameObject[] foodTiles;
+    // public GameObject[] enemy;
+    public GameObject[] enemy;
 
     //Create GameBoard and add tile references dictionary.
     public void BoardSetup()
@@ -48,7 +49,7 @@ public class BoardManager : MonoBehaviour
             //Loop along y axis, starting from -1 to place floor or outerwall tiles.
             for (int y = 0; y < rows; y++)
             {
-                gridPositions.Add(new Vector2(x, y), new Vector2(x, y));
+                gridPositions.Add(new Vector2(x, y), new Vector2(x, y)); //Add to dictionary
                 GameObject toInstantiate = floorTiles[Random.Range(0, floorTiles.Length)]; //Randomly instantiates a floor tile from array
                 GameObject instance = Instantiate(toInstantiate, new Vector3(x, y, 0f), Quaternion.identity) as GameObject; //Randomly choose co-ordinates for floor tile
                 instance.transform.SetParent(boardHolder); //Floor tile set to child of board holder
@@ -57,6 +58,7 @@ public class BoardManager : MonoBehaviour
         }
     }
 
+    //Gets Postion of an enemy and check to see whether that position is in the dictionary of visible floor tiles
     public bool checkValidTile(Vector2 pos)
     {
         if (gridPositions.ContainsKey(pos))
@@ -143,13 +145,21 @@ public class BoardManager : MonoBehaviour
             GameObject instance = Instantiate(toInstantiate, new Vector3
            (tileToAdd.x, tileToAdd.y, 0f), Quaternion.identity) as GameObject;
             instance.transform.SetParent(boardHolder);
-            /*
-            if (Random.Range(0, 3) == 1)
+
+            /*if (Random.Range(0, 3) == 1)
             {
                 toInstantiate = wallTiles[Random.Range(0, wallTiles.Length)];
                 instance = Instantiate(toInstantiate, new Vector3(tileToAdd.x, tileToAdd.y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
             }*/
+
+            //For every 1 in 40 tiles, an exit tile is spawned
+            if (Random.Range(0, 40) == 1)
+            {
+                toInstantiate = foodTiles[Random.Range(0, foodTiles.Length)];
+                instance = Instantiate(toInstantiate, new Vector3(tileToAdd.x, tileToAdd.y, 0f), Quaternion.identity) as GameObject;
+                instance.transform.SetParent(boardHolder);
+            }
             //For every 1 in 100 tiles, an exit tile is spawned 
             if (Random.Range(0, 100) == 1)
             {
@@ -158,9 +168,10 @@ public class BoardManager : MonoBehaviour
                tileToAdd.y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
             }
-            else if (Random.Range(0, GameManager.instance.enemySpawnRatio) == 1)
+            //For every 1 in enemySpawnRatio, an enemy tile is spawned
+            else if (Random.Range(0, 100/*GameManager.instance.enemySpawnRatio*/) == 1)
             {
-                toInstantiate = enemy;
+                toInstantiate = enemy[Random.Range(0, enemy.Length)];
                 instance = Instantiate(toInstantiate, new Vector3(tileToAdd.x,
                tileToAdd.y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(boardHolder);
@@ -193,7 +204,7 @@ public class BoardManager : MonoBehaviour
 
             else if (tile.Value == TileType.enemy)
             {
-                toInstantiate = enemy;
+                toInstantiate = enemy[Random.Range(0,enemy.Length)]; 
                 instance = Instantiate(toInstantiate, new Vector3(tile.Key.x,
                tile.Key.y, 0f), Quaternion.identity) as GameObject;
                 instance.transform.SetParent(dungeonBoardHolder);

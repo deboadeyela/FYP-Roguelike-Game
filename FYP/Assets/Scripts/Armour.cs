@@ -1,7 +1,9 @@
 ﻿using UnityEngine;
 using System;
 using Random = UnityEngine.Random;
+using UnityEngine.UI;
 
+//  Enumeration that dictates the armour type
 public enum armourType
 {
     glove, boot
@@ -9,33 +11,45 @@ public enum armourType
 
 public class Armour : MonoBehaviour
 {
-
+    //Item references
     public Sprite glove;
     public Sprite boot;
 
-    public armourType type;
-    public Color level;
-    public int attackMod, defenseMod;
 
+    public armourType type; //Reference to armour type
+    public Color level; //Color used to show how powerful armour is
+
+    //Attack/Defense Ratings for Player
+    public int attackMod, defenseMod;
+   
+    //Sprite Reference
     private SpriteRenderer spriteRenderer;
+    private SpriteRenderer sRend;
 
     public void RandomArmourInit()
     {
+        sRend = GetComponent<SpriteRenderer>();
         spriteRenderer = GetComponent<SpriteRenderer>();
         SelectArmour();
     }
 
+    //Generate the random armour
     private void SelectArmour()
     {
         var itemCount = Enum.GetValues(typeof(armourType)).Length;
         type = (armourType)Random.Range(0, itemCount);
 
+        //Dictates the base value for armour
         switch (type)
         {
             case armourType.glove:
                 attackMod = Random.Range(1, 4);
                 defenseMod = 0;
                 spriteRenderer.sprite = glove;
+                //           c++;
+                //         Player.instance.gloveText.text = " Gloves: x" + c;
+                  //       Player.instance.attackText.text = "Attack: " + attackMod;
+
                 break;
             case armourType.boot:
                 attackMod = 0;
@@ -44,6 +58,7 @@ public class Armour : MonoBehaviour
                 break;
         }
 
+        //Changes color of item and adjust value of attack/defense Ratings for Player based off probability
         int randomLevel = Random.Range(0, 100);
         if (randomLevel >= 0 && randomLevel < 50)
         {
@@ -59,7 +74,7 @@ public class Armour : MonoBehaviour
         }
         else if (randomLevel >= 75 && randomLevel < 90)
         {
-            spriteRenderer.color = level = Color.yellow;
+            spriteRenderer.color = level = new Color(1.0F, 0.64F, 0.0F);
             attackMod += Random.Range(15, 25);
             defenseMod += Random.Range(15, 25);
         }
@@ -69,5 +84,7 @@ public class Armour : MonoBehaviour
             attackMod += Random.Range(40, 55);
             defenseMod += Random.Range(40, 55);
         }
+
+        //attackText.text = "Attack: " + attackMod;
     }
 }

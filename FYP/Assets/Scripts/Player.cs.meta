@@ -3,7 +3,21 @@ guid: 5ea1f59e19fde3a45be2206bd45292eb
 MonoImporter:
   externalObjects: {}
   serializedVersion: 2
-  defaultReferences: []
+  defaultReferences:
+  - boxCollider: {instanceID: 0}
+  - healthText: {instanceID: 0}
+  - glove: {instanceID: 0}
+  - boot: {instanceID: 0}
+  - attackText: {fileID: 6101595621671468167, guid: c4063c4c9a2a33b4fae7ff414dc526a0,
+      type: 3}
+  - weaponComp1: {instanceID: 0}
+  - moveSound1: {instanceID: 0}
+  - moveSound2: {instanceID: 0}
+  - eatSound1: {instanceID: 0}
+  - eatSound2: {instanceID: 0}
+  - drinkSound1: {instanceID: 0}
+  - drinkSound2: {instanceID: 0}
+  - gameOverSound: {instanceID: 0}
   executionOrder: 0
   icon: {instanceID: 0}
   userData: 

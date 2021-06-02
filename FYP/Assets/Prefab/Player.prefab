@@ -167,16 +167,19 @@ MonoBehaviour:
     m_Bits: 256
   boxCollider: {fileID: 0}
   wallDamage: 1
-  healthText: {fileID: 0}
+  healthText: {fileID: 2984807023538777602, guid: 1c4d673e359deca448fe87236672fd84,
+    type: 3}
   onWorldBoard: 0
   dungeonTransition: 0
   glove: {fileID: 0}
   boot: {fileID: 0}
-  attackMod: 0
-  defenseMod: 0
+  steelWeapon: {fileID: 21300000, guid: f42b7a5dab811bb4a80736b3f934c38e, type: 3}
   weaponComp1: {fileID: 0}
   moveSound1: {fileID: 8300000, guid: 53f1dcdc88896e74c9c849242992cfa1, type: 3}
   moveSound2: {fileID: 8300000, guid: 7811d2f040d05634e87a0a4a718bd753, type: 3}
   eatSound1: {fileID: 8300000, guid: 1f9563e0f39fcd046a9b0d863f99b514, type: 3}
   eatSound2: {fileID: 8300000, guid: 52f667ceca931b248b9991884e367eaa, type: 3}
+  drinkSound1: {fileID: 8300000, guid: ec10f8fe90fe36e42a33b685f8dc5846, type: 3}
+  drinkSound2: {fileID: 8300000, guid: e10800c267ddc7e43bee4c2cedb6554a, type: 3}
   gameOverSound: {fileID: 8300000, guid: a7bbd11ed1481f148a708fd93fea2b59, type: 3}
+  c: 0

@@ -6,9 +6,10 @@ using UnityEngine;
 public class Loader : MonoBehaviour
 {
     public GameObject gameManager;
+  //  public static Loader instance = this;
 
     //Awake function creates a new GameManager if one doesn't already exist 
-    void Awake()
+    public void Awake()
     {
         
         if (GameManager.instance == null)

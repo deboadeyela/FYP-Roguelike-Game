@@ -11,7 +11,6 @@ GameObject:
   - component: {fileID: 750050082609449321}
   - component: {fileID: 3128817819287814688}
   - component: {fileID: 8744403193492575761}
-  - component: {fileID: 114114589100993552}
   m_Layer: 8
   m_Name: OuterWall1
   m_TagString: Wall
@@ -107,25 +106,3 @@ BoxCollider2D:
   serializedVersion: 2
   m_Size: {x: 1, y: 1}
   m_EdgeRadius: 0
---- !u!114 &114114589100993552
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 8298431564968915725}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: b60703b59b40d654586f7ad905c7818e, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  damaged: {fileID: 0}
-  wallHealth: 1
-  foodTiles:
-  - {fileID: 6534683704033953076, guid: 6d1533a0f8631814495df9eec46c55f2, type: 3}
-  - {fileID: 3546753029629224565, guid: 28608fb520cfa6c47ab799f474ef9e3a, type: 3}
-  floorT:
-  - {fileID: 5667601724365843498, guid: fbc04c94a7116c54caf983f2136af5ae, type: 3}
-  - {fileID: 3801817363892779063, guid: 1e9b6c7a75653804c9adff9d5ad274f7, type: 3}
-  chopSound1: {fileID: 8300000, guid: cfb63ac9bded3e048ac3cef983f99be7, type: 3}
-  chopSound2: {fileID: 8300000, guid: 9969d2f454561ba428cc51e872ce6d57, type: 3}

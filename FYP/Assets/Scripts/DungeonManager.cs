@@ -134,7 +134,7 @@ public class DungeonManager : MonoBehaviour
         List<PathTile> pathQueue = new List<PathTile>(); //List is used for queue
         List<PathTile> tempQueue = new List<PathTile>();
         var tempArray = pathQueue.ToArray(); //temporary array is used for list
-        int i = 0;
+        int i ;
 
         //Copy essential path to path queue
         foreach (KeyValuePair<Vector2, TileType> tile in gridPositions)
