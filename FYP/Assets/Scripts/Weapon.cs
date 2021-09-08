@@ -4,7 +4,7 @@ using System.Collections;
 public class Weapon : MonoBehaviour
 {
 
-    public bool inPlayerInventory = false; //Identifies whether weapon was picked up by the player
+    public bool weaponInInventory = false; //Identifies whether weapon was picked up by the player
 
     private Player player; //Refernece to Player character
     public WeaponComponents[] weaponsComps; //Array of references to child weapon components
@@ -21,25 +21,25 @@ public class Weapon : MonoBehaviour
     //Updates player animation
     void Update()
     {
-        if (inPlayerInventory) //Checks if item is in player inventory
+        if (weaponInInventory) //Checks if item is in player inventory
         {
             transform.position = player.transform.position; //Weapon has same coordinates as player
             if (weaponUsed == true)
             {
                 //Adjust arc animations
                 float degreeY = 0, degreeZ = -90f, degreeZMax = 275f;
-                Vector3 returnVecter = Vector3.zero;
+                Vector3 returnVector = Vector3.zero;
                 
                 //Makes sword face right if player is 
                 if (Player.isFacingRight)
                 {
                     degreeY = 0;
-                    returnVecter = Vector3.zero;
+                    returnVector = Vector3.zero; //Set sword positon to upright starting value
                 }
                 else if (!Player.isFacingRight)
                 {
                     degreeY = 180;
-                    returnVecter = new Vector3(0, 180, 0);
+                    returnVector = new Vector3(0, 180, 0); //Set sword positon to upright starting value
                 }
 
                 //Rotates Sword
@@ -50,7 +50,7 @@ public class Weapon : MonoBehaviour
                 //Resets angle of sword
                 if (transform.eulerAngles.z <= degreeZMax)
                 {
-                    transform.eulerAngles = returnVecter;
+                    transform.eulerAngles = returnVector;
                     weaponUsed = false;
                     enableSpriteRender(false);
                 }

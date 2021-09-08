@@ -16,46 +16,46 @@ public class DungeonManager : MonoBehaviour
     [Serializable]
     public class PathTile
     {
-        public TileType type;   //Holds a TileType enum value
-        public Vector2 position;    //Position of tile
-        public List<Vector2> adjacentPathTiles; //List that is used to store the tiles next to the current PathTile
+        public TileType typeOfTile;   //Holds a TileType enum value
+        public Vector2 tilePosition;    //Position of tile
+        public List<Vector2> adjacentTiles; //List that is used to store the tiles next to the current PathTile
 
         //Constructor is called to make new PathTile
-        public PathTile(TileType t, Vector2 p, int min, int max,
+        public PathTile(TileType typeTile, Vector2 positionTile, int min, int max,
        Dictionary<Vector2, TileType> currentTiles)
         {
-            type = t;
-            position = p;
-            adjacentPathTiles = getAdjacentPath(min, max, currentTiles);    //function that will calculate which tiles are adjacent
+            typeOfTile = typeTile;
+            tilePosition = positionTile;
+            adjacentTiles = getAdjacentPath(min, max, currentTiles);    //function that will calculate which tiles are adjacent
                                                                             //to this tile based on the Dungeon Board dimensions and current tiles that have been
                                                                             //laid out.
         }
     
         //Methods are used to check adjacent tiles to the top, right, bottom, and left of the current PathTile
         //ContainsKey() checks whether is within the grid dimensions and if the tile is already part of the dungeon tile list
-        public List<Vector2> getAdjacentPath(int minBound, int maxBound,
+        public List<Vector2> getAdjacentPath(int minimum, int maximum,
        Dictionary<Vector2, TileType> currentTiles)
         {
             List<Vector2> pathTiles = new List<Vector2>();
-            if (position.y + 1 < maxBound && !currentTiles.ContainsKey(new
-           Vector2(position.x, position.y + 1)))
+            if (tilePosition.y + 1 < maximum && !currentTiles.ContainsKey(new
+           Vector2(tilePosition.x, tilePosition.y + 1)))
             {
-                pathTiles.Add(new Vector2(position.x, position.y + 1));
+                pathTiles.Add(new Vector2(tilePosition.x, tilePosition.y + 1));
             }
-            if (position.x + 1 < maxBound && !currentTiles.ContainsKey(new
-           Vector2(position.x + 1, position.y)))
+            if (tilePosition.x + 1 < maximum && !currentTiles.ContainsKey(new
+           Vector2(tilePosition.x + 1, tilePosition.y)))
             {
-                pathTiles.Add(new Vector2(position.x + 1, position.y));
+                pathTiles.Add(new Vector2(tilePosition.x + 1, tilePosition.y));
             }
-            if (position.y - 1 > minBound && !currentTiles.ContainsKey(new
-           Vector2(position.x, position.y - 1)))
+            if (tilePosition.y - 1 > minimum && !currentTiles.ContainsKey(new
+           Vector2(tilePosition.x, tilePosition.y - 1)))
             {
-                pathTiles.Add(new Vector2(position.x, position.y - 1));
+                pathTiles.Add(new Vector2(tilePosition.x, tilePosition.y - 1));
             }
-            if (position.x - 1 >= minBound && !currentTiles.ContainsKey(new
-           Vector2(position.x - 1, position.y)) && type != TileType.essential)
+            if (tilePosition.x - 1 >= minimum && !currentTiles.ContainsKey(new
+           Vector2(tilePosition.x - 1, tilePosition.y)) && typeOfTile != TileType.essential)
             {
-                pathTiles.Add(new Vector2(position.x - 1, position.y));
+                pathTiles.Add(new Vector2(tilePosition.x - 1, tilePosition.y));
             }
             return pathTiles;
         }
@@ -78,57 +78,58 @@ public class DungeonManager : MonoBehaviour
         gridPositions.Clear();
         maxBound = Random.Range(50, 101);
 
-        BuildEssentialPath();
+        BuildEssential();
 
-        BuildRandomPath();
+        BuildRandom();
     }
 
-    private void BuildEssentialPath()
+    private void BuildEssential()
     {
-        int randomY = Random.Range(0, maxBound + 1); //Randomly choose y coordinate for our entrance
+        int randomYCoordinate = Random.Range(0, maxBound + 1); //Randomly choose y coordinate for our entrance
         //Container for path tile 
         //Initially set to entrance location
-        PathTile ePath = new PathTile(TileType.essential, new Vector2(0,randomY), minBound, maxBound, gridPositions);
-        startPos = ePath.position; //Entrance location where player is moved to
-        int boundTracker = 0; //Tracks how far along grid length we are 
+        PathTile essentialPath = new PathTile(TileType.essential, new Vector2(0,randomYCoordinate), minBound, maxBound, gridPositions);
+        startPos = essentialPath.tilePosition; //Entrance location where player is moved to
+        int gridLength = 0; //Tracks how far along grid length we are 
 
         //Loops through spaces in tile grid and ends when essential path 
         //has reached right side of grid
-        while (boundTracker < maxBound)
+        while (gridLength < maxBound)
         {
-            gridPositions.Add(ePath.position, TileType.empty);
-            int adjacentTileCount = ePath.adjacentPathTiles.Count;
-            int randomIndex = Random.Range(0, adjacentTileCount);
-            Vector2 nextEPathPos;
-            if (adjacentTileCount > 0)
+            gridPositions.Add(essentialPath.tilePosition, TileType.empty); //Add current tile to dictionary
+            int adjacentTileCount = essentialPath.adjacentTiles.Count; //Count Adjacent tiles
+            int randomNum = Random.Range(0, adjacentTileCount); //Use PRN to choose random adjacent tile to follow
+            Vector2 nextEssentialPathPos; //reference to next random adjacent tile that algorithm will follow
+            if (adjacentTileCount > 0) //check if there are adjacent tiles
             {
-                nextEPathPos = ePath.adjacentPathTiles[randomIndex];
+                nextEssentialPathPos = essentialPath.adjacentTiles[randomNum]; //next random adjacent tile is chosen to be followed
             }
             else
             {
-                break;
+                break; //if there are no adjacent tiles, then end of the grid reached and loop can be broken
             }
-            PathTile nextEPath = new PathTile(TileType.essential, nextEPathPos,
-           minBound, maxBound, gridPositions);
-            if (nextEPath.position.x > ePath.position.x || (nextEPath.position.x
-           == maxBound - 1 && Random.Range(0, 2) == 1))
+            PathTile nextEssentialPath = new PathTile(TileType.essential, nextEssentialPathPos,
+           minBound, maxBound, gridPositions); //next random adjacent tile is chosen to be followed and is part of essential path 
+            if (nextEssentialPath.tilePosition.x > essentialPath.tilePosition.x || (nextEssentialPath.tilePosition.x
+           == maxBound - 1 && Random.Range(0, 2) == 1)) //if loop checks if path is moving right
             {
-                ++boundTracker;
+                ++gridLength;
             }
-            ePath = nextEPath;
+            essentialPath = nextEssentialPath; //tile is then set to current after all the above has been completed
         }
+        //IF loop checks if FINAL tile was added to list as loop may have have broken earlier
+        //This final tile is then set to end position of dungeon
+        if (!gridPositions.ContainsKey(essentialPath.tilePosition))
+            gridPositions.Add(essentialPath.tilePosition, TileType.empty);
 
-        if (!gridPositions.ContainsKey(ePath.position))
-            gridPositions.Add(ePath.position, TileType.empty);
-
-        endPos = new Vector2(ePath.position.x, ePath.position.y);
+        endPos = new Vector2(essentialPath.tilePosition.x, essentialPath.tilePosition.y);
     }
 
     //Checks if there are open adjacent path tiles
     //that can branch off into alternate path
     //and then chooses whether to add "chamber"
     //at end of path
-    private void BuildRandomPath()
+    private void BuildRandom()
     {
         
         List<PathTile> pathQueue = new List<PathTile>(); //List is used for queue
@@ -150,7 +151,7 @@ public class DungeonManager : MonoBehaviour
         //foreach (PathTile tile in tempArray)
         {
 
-            int adjacentTileCount = tile.adjacentPathTiles.Count; //Checks for adjacent tiles
+            int adjacentTileCount = tile.adjacentTiles.Count; //Checks for adjacent tiles
             if (adjacentTileCount != 0)
             {
                 //1 in 5 chance path will become chamber
@@ -158,13 +159,13 @@ public class DungeonManager : MonoBehaviour
                 {
                     BuildRandomChamber(tile);
                 }
-                else if (Random.Range(0, 5) == 1 || (tile.type == TileType.random
-               && adjacentTileCount > 1))
+                else if (Random.Range(0, 5) == 1 || (tile.typeOfTile == TileType.random
+               && adjacentTileCount > 1)) //1 in 5 chance that current random tile will continue to develop path 
                 {
-                    int randomIndex = Random.Range(0, adjacentTileCount);
+                    int randomNum = Random.Range(0, adjacentTileCount);
 
-                    Vector2 newRPathPos = tile.adjacentPathTiles[randomIndex];
-                    //Checks path tile isnt already part of dungeon
+                    Vector2 newRPathPos = tile.adjacentTiles[randomNum];
+                    //Checks randpm path tile isnt already part of dungeon
                     if (!gridPositions.ContainsKey(newRPathPos))
                     {
                         if (Random.Range(0, 20) == 1)
@@ -178,7 +179,7 @@ public class DungeonManager : MonoBehaviour
 
                         PathTile newRPath = new PathTile(TileType.random, newRPathPos,
                        minBound, maxBound, gridPositions);
-                        pathQueue.Add(newRPath);
+                        pathQueue.Add(newRPath); //add new tile to dictionary
 
                         //tempArray[i] = newRPath;
                         //i++;
@@ -192,13 +193,13 @@ public class DungeonManager : MonoBehaviour
     //Adds chamber to random path
     private void BuildRandomChamber(PathTile tile)
     {
-        int chamberSize = 3, adjacentTileCount = tile.adjacentPathTiles.Count, randomIndex = Random.Range(0, adjacentTileCount); //Chamber is 3x3 //Choose adjacent tile
-        Vector2 chamberOrigin = tile.adjacentPathTiles[randomIndex]; //Origin of chamber
+        int chamberDimension = 3, adjacentTileCount = tile.adjacentTiles.Count, randomIndex = Random.Range(0, adjacentTileCount); //Chamber is 3x3 //Choose adjacent tile
+        Vector2 chamberStart = tile.adjacentTiles[randomIndex]; //Origin of chamber
 
         //Loop through tiles we need to add
-        for (int x = (int)chamberOrigin.x; x < chamberOrigin.x + chamberSize; x++)
+        for (int x = (int)chamberStart.x; x < chamberStart.x + chamberDimension; x++)
         {
-            for (int y = (int)chamberOrigin.y; y < chamberOrigin.y + chamberSize; y++)
+            for (int y = (int)chamberStart.y; y < chamberStart.y + chamberDimension; y++)
             {
                 Vector2 chamberTilePos = new Vector2(x, y);
                 if (!gridPositions.ContainsKey(chamberTilePos) && chamberTilePos.x < maxBound && chamberTilePos.x > 0 && chamberTilePos.y < maxBound && chamberTilePos.y > 0)

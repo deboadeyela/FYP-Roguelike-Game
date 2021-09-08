@@ -87,7 +87,7 @@ public abstract class MovingObject : MonoBehaviour
              }
         else if (xDir == -1)
         {
-             transform.eulerAngles = new Vector3(0, 180, 0);
+             transform.eulerAngles = new Vector3(0, 180, 0); //rotates player 180 degrees when player is moving left
              }
         //Hit will store whatever our linecast hits when Move is called.
         RaycastHit2D hit;

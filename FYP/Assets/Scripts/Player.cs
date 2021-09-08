@@ -31,7 +31,7 @@ public class Player : MovingObject
     public Sprite goldWeapon;
     public Sprite diamondWeapon;
     // public Text gloveText;
-    public int attackMod = 0, defenseMod = 0; //attack/defense ratings
+    public int attack = 0, defense = 0; //attack/defense ratings
     //public static Player instance;
    // private Armour armourScript;
     private Dictionary<String, Armour> inventory;  //Inventory for armour
@@ -61,8 +61,8 @@ public class Player : MovingObject
         health = GameManager.instance.playerHealth;
         healthText.text = "Health: " + health;
         // gloveText.text = "Gloves: x" + gloveCount;
-        attackMod = GameManager.instance.attackRating;
-        defenseMod = GameManager.instance.defenceRating;
+        attack = GameManager.instance.attackRating;
+        defense = GameManager.instance.defenceRating;
         //attackText.text = "Attack: " + attackMod;
 
         onWorldBoard = true;
@@ -316,7 +316,7 @@ public class Player : MovingObject
                 else
                     inventory["glove"] = armourData;
 
-                glove.color = armourData.level;
+                glove.color = armourData.strength;
                 break;
             case armourType.boot:
                 if (!inventory.ContainsKey("boot"))
@@ -324,80 +324,105 @@ public class Player : MovingObject
                 else
                     inventory["boot"] = armourData;
 
-                boot.color = armourData.level;
+                boot.color = armourData.strength;
                 break;
         }
 
-        attackMod = 0;
-        defenseMod = 0;
+        attack = 0;
+        defense = 0;
 
         foreach (KeyValuePair<String, Armour> gear in inventory)
         {
-            attackMod += gear.Value.attackMod;
-            defenseMod += gear.Value.defenseMod;
-           // GameManager.instance.attackRating = attackMod;
+            attack += gear.Value.attack;
+            defense += gear.Value.defense;
+            attack = Mathf.Clamp(attack, 0, 30);
+            defense = Mathf.Clamp(defense, 0, 30);
+            wallDamage += attack;
+            wallDamage = Mathf.Clamp(wallDamage, 0, 30);
+            // GameManager.instance.attackRating = attackMod;
             //attackText.text = "Attack: " + attackMod;
 
         }
-        GameManager.instance.attackRating += attackMod;
+        GameManager.instance.attackRating += attack;
+        GameManager.instance.attackRating = Mathf.Clamp(GameManager.instance.attackRating, 0, 30);
         attackText.text = "Attack: " + GameManager.instance.attackRating;
 
-        GameManager.instance.defenceRating += defenseMod;
+        GameManager.instance.defenceRating += defense;
+        GameManager.instance.defenceRating = Mathf.Clamp(GameManager.instance.defenceRating, 0, 30);
         defenceText.text = "Defence: " + GameManager.instance.defenceRating;
+        
         //  attackText.text = "Attack: " + attackMod;
-      /*  if (weapon)
-        {
-            attackMod = attackMod + 200;
-           // attackMod += 5;
-        }*/
+        /*  if (weapon)
+          {
+              attackMod = attackMod + 200;
+             // attackMod += 5;
+          }*/
         //c = attackMod;
-     //   attackText.text = "Attack: " + c; 
+        //   attackText.text = "Attack: " + c; 
     }
 
     //Update attack/defence rating based on inventory image sprite
     private void UpdateWeaponScore() {
-        attackMod = 0;
-        defenseMod = 0;
+        attack = 0;
+        defense = 0;
 
         if (weaponComp1.sprite == steelWeapon) {
             Debug.Log("Hello");
-            attackMod += 1;
-            GameManager.instance.attackRating += attackMod;
+            attack += 1;
+            attack = Mathf.Clamp(attack, 0, 30);
+            GameManager.instance.attackRating += attack;
+            GameManager.instance.attackRating = Mathf.Clamp(GameManager.instance.attackRating, 0, 30);
             attackText.text = "Attack: " + GameManager.instance.attackRating;
+           
 
-            defenseMod += 1;
-            GameManager.instance.defenceRating += defenseMod;
+            defense += 1;
+            defense = Mathf.Clamp(defense, 0, 30);
+            GameManager.instance.defenceRating += defense;
+            GameManager.instance.defenceRating = Mathf.Clamp(GameManager.instance.defenceRating, 0, 30);
             defenceText.text = "Defence: " + GameManager.instance.defenceRating;
 
-            wallDamage += attackMod;
+            wallDamage += attack;
+            wallDamage = Mathf.Clamp(wallDamage, 0, 30);
         }
 
         else if (weaponComp1.sprite == goldWeapon)
         {
             Debug.Log("Hello");
-            attackMod += 2;
-            GameManager.instance.attackRating += attackMod;
+            attack += 2;
+            attack = Mathf.Clamp(attack, 0, 30);
+            GameManager.instance.attackRating += attack;
+            GameManager.instance.attackRating = Mathf.Clamp(GameManager.instance.attackRating, 0, 30);
             attackText.text = "Attack: " + GameManager.instance.attackRating;
+            
 
-            defenseMod += 2;
-            GameManager.instance.defenceRating += defenseMod;
+            defense += 2;
+            defense = Mathf.Clamp(defense, 0, 30);
+            GameManager.instance.defenceRating += defense;
+            GameManager.instance.defenceRating = Mathf.Clamp(GameManager.instance.defenceRating, 0, 30);
             defenceText.text = "Defence: " + GameManager.instance.defenceRating;
 
-            wallDamage += attackMod;
+            wallDamage += attack;
+            wallDamage = Mathf.Clamp(wallDamage, 0, 30);
         }
 
         else if (weaponComp1.sprite == diamondWeapon)
         {
             Debug.Log("Hello");
-            attackMod += 3;
-            GameManager.instance.attackRating += attackMod;
+            attack += 3;
+            attack = Mathf.Clamp(attack, 0, 30);
+            GameManager.instance.attackRating += attack;
+            GameManager.instance.attackRating = Mathf.Clamp(GameManager.instance.attackRating, 0, 30);
             attackText.text = "Attack: " + GameManager.instance.attackRating;
+         
 
-            defenseMod += 3;
-            GameManager.instance.defenceRating += defenseMod;
+            defense += 3;
+            defense = Mathf.Clamp(defense, 0, 30);
+            GameManager.instance.defenceRating += defense;
+            GameManager.instance.defenceRating = Mathf.Clamp(GameManager.instance.defenceRating, 0, 30);
             defenceText.text = "Defence: " + GameManager.instance.defenceRating;
 
-            wallDamage += attackMod;
+            wallDamage += attack;
+            wallDamage = Mathf.Clamp(wallDamage, 0, 30);
         }
 
     }
@@ -407,10 +432,10 @@ public class Player : MovingObject
     {
         if (wallDamage >= 10)
             GameManager.instance.enemiesSmarter = true;
-        if (wallDamage >= 15)
-            GameManager.instance.enemiesFaster = true;
         if (wallDamage >= 20)
-            GameManager.instance.enemySpawnRatio = 10;
+            GameManager.instance.enemiesFaster = true;
+        if (wallDamage >= 28)
+            GameManager.instance.enemySpawnRatio = 40;
     }
 
     private void OnTriggerEnter2D(Collider2D other)
@@ -439,9 +464,10 @@ public class Player : MovingObject
         else if (other.tag == "Item")
         {
             UpdateInventory(other);
-               attackText.text = "Attack: " + GameManager.instance.attackRating;
+            attackText.text = "Attack: " + GameManager.instance.attackRating;
             defenceText.text = "Defence: " + GameManager.instance.defenceRating;
             Destroy(other.gameObject);
+            AdaptDifficulty();
         }
 
         //Checks if the player collides with weapon
@@ -455,11 +481,11 @@ public class Player : MovingObject
                 Destroy(transform.GetChild(0).gameObject);
             }
             //attackText.text = "Attack: " + GameManager.instance.attackRating;
-            other.enabled = false;
-            other.transform.parent = transform;
+            other.enabled = false; //disable box collider of weapon
+            other.transform.parent = transform; //set player as parent of weapon
             weapon = other.GetComponent<Weapon>();
             weapon.AcquireWeapon();
-            weapon.inPlayerInventory = true;
+            weapon.weaponInInventory = true;
             weapon.enableSpriteRender(false);
            // wallDamage = attackMod + 3;
             weaponComp1.sprite = weapon.getComponentImage(0);

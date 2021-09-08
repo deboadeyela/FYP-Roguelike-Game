@@ -51,12 +51,12 @@ MonoBehaviour:
   turnDelay: 0.05
   playerHealth: 100
   playersTurn: 1
-  enemyHealth: 30
+  enemyHealth: 70
   attackRating: 0
   defenceRating: 0
   enemiesFaster: 0
   enemiesSmarter: 0
-  enemySpawnRatio: 20
+  enemySpawnRatio: 100
   exploredDungeons: 0
   enemiesKilled: 0
   playerScore: 0
@@ -74,7 +74,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   columns: 5
   rows: 5
-  floorTiles:
+  tileFloor:
   - {fileID: 5667601724365843498, guid: fbc04c94a7116c54caf983f2136af5ae, type: 3}
   - {fileID: 3801817363892779063, guid: 1e9b6c7a75653804c9adff9d5ad274f7, type: 3}
   - {fileID: 7708418798659188323, guid: db882a52c44147749b7e3d0cbd1ad93b, type: 3}
@@ -83,16 +83,24 @@ MonoBehaviour:
   - {fileID: 8119143795977476290, guid: 6cc47d8ce0d0fcc44998b1d77b3cb1de, type: 3}
   - {fileID: 6423319168035131308, guid: 22e0e5e98f68a5c4a90a1972798cc0e3, type: 3}
   - {fileID: 5418577342701650594, guid: f9d5b995500c3b843b0dbc6e75492374, type: 3}
-  exit: {fileID: 2714423101558989228, guid: c567bb6466706ce469844eb73ba9abf6, type: 3}
-  outerWallTiles:
+  dungeonExit: {fileID: 2714423101558989228, guid: c567bb6466706ce469844eb73ba9abf6,
+    type: 3}
+  dungeonWallTiles:
   - {fileID: 8298431564968915725, guid: f13374c3515dd314c98011966f52fad6, type: 3}
   - {fileID: 5157664443599713226, guid: 7e0dc17cca20fd346b85f677fc55fdff, type: 3}
   - {fileID: 1487891439916921244, guid: 94ec2cd951b7f4340a6196bc35455ce7, type: 3}
-  wallTiles:
-  - {fileID: 1487891439916921244, guid: 94ec2cd951b7f4340a6196bc35455ce7, type: 3}
-  chestTile: {fileID: 5016130235875375195, guid: c20cc0888ca5a294a9d16433e493587f,
+  tileWall:
+  - {fileID: 8824919053045099730, guid: a3936344377ed004fb2a20d8876f9757, type: 3}
+  - {fileID: 6070464736088122430, guid: c61a7a3db930a874fae1c0417a44c476, type: 3}
+  - {fileID: 8338529859743449013, guid: 6de60196ca3a5ce48bb99ad766c735e7, type: 3}
+  - {fileID: 4094861735379531978, guid: 9166bb2e270e41946a1ce1ca6cd3bc97, type: 3}
+  - {fileID: 377262768785381147, guid: 78fdd5dcec8f8c54b934e73fe73b63e9, type: 3}
+  - {fileID: 4836453795094136527, guid: 40113568c57d6894698d683333794358, type: 3}
+  - {fileID: 7476142366639650268, guid: 15343949b8685674a9187211ef021f05, type: 3}
+  - {fileID: 5281478842286025986, guid: 4eef93bccc9f96741b75ab1e8ca37e73, type: 3}
+  tileChest: {fileID: 5016130235875375195, guid: c20cc0888ca5a294a9d16433e493587f,
     type: 3}
-  foodTiles:
+  tileFood:
   - {fileID: 6534683704033953076, guid: 6d1533a0f8631814495df9eec46c55f2, type: 3}
   - {fileID: 3546753029629224565, guid: 28608fb520cfa6c47ab799f474ef9e3a, type: 3}
   enemy:

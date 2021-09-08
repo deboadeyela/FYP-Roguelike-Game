@@ -17,72 +17,70 @@ public class Armour : MonoBehaviour
 
 
     public armourType type; //Reference to armour type
-    public Color level; //Color used to show how powerful armour is
+    public Color strength; //Color used to show how powerful armour is
 
     //Attack/Defense Ratings for Player
-    public int attackMod, defenseMod;
+    public int attack, defense;
    
     //Sprite Reference
-    private SpriteRenderer spriteRenderer;
     private SpriteRenderer sRend;
-
+    
     public void RandomArmourInit()
     {
         sRend = GetComponent<SpriteRenderer>();
-        spriteRenderer = GetComponent<SpriteRenderer>();
         SelectArmour();
     }
 
     //Generate the random armour
     private void SelectArmour()
     {
-        var itemCount = Enum.GetValues(typeof(armourType)).Length;
-        type = (armourType)Random.Range(0, itemCount);
+        var armourCount = Enum.GetValues(typeof(armourType)).Length;
+        type = (armourType)Random.Range(0, armourCount);
 
         //Dictates the base value for armour
         switch (type)
         {
             case armourType.glove:
-                attackMod = Random.Range(1, 4);
-                defenseMod = 0;
-                spriteRenderer.sprite = glove;
+                attack = Random.Range(1, 4);
+                defense = 0;
+                sRend.sprite = glove;
                 //           c++;
                 //         Player.instance.gloveText.text = " Gloves: x" + c;
                   //       Player.instance.attackText.text = "Attack: " + attackMod;
 
                 break;
             case armourType.boot:
-                attackMod = 0;
-                defenseMod = Random.Range(1, 4);
-                spriteRenderer.sprite = boot;
+                attack = 0;
+                defense = Random.Range(1, 4);
+                sRend.sprite = boot;
                 break;
         }
 
         //Changes color of item and adjust value of attack/defense Ratings for Player based off probability
-        int randomLevel = Random.Range(0, 100);
-        if (randomLevel >= 0 && randomLevel < 50)
+        int randomStrength = Random.Range(0, 100);
+        if (randomStrength >= 0 && randomStrength < 50)
         {
-            spriteRenderer.color = level = Color.blue;
-            attackMod += Random.Range(1, 4);
-            defenseMod += Random.Range(1, 4);
+            sRend.color = strength = Color.blue;
+            attack += Random.Range(1, 4);
+            defense += Random.Range(1, 4);
         }
-        else if (randomLevel >= 50 && randomLevel < 75)
+        else if (randomStrength >= 50 && randomStrength < 75)
         {
-            spriteRenderer.color = level = Color.green;
-            attackMod += Random.Range(4, 10);
-            defenseMod += Random.Range(4, 10);
+            sRend.color = strength = Color.green;
+            attack += Random.Range(4, 8);
+            defense += Random.Range(4, 8);
         }
-        else if (randomLevel >= 75 && randomLevel < 90)
+        else if (randomStrength >= 75 && randomStrength < 90)
         {
-            spriteRenderer.color = level = new Color(1.0F, 0.64F, 0.0F);
-            attackMod += Random.Range(15, 25);
-            defenseMod += Random.Range(15, 25);
+            sRend.color = strength = new Color(1.0F, 0.64F, 0.0F);
+            attack += Random.Range(8, 12);
+            defense += Random.Range(8, 12);
         }
         else
         {
-            spriteRenderer.color = level = Color.magenta;
-            attackMod += Random.Range(40, 55);
-            defenseMod += Random.Range(40, 55);
+            sRend.color = strength = Color.magenta;
+            attack += Random.Range(12, 16);
+            defense += Random.Range(12, 16);
         }
 
         //attackText.text = "Attack: " + attackMod;

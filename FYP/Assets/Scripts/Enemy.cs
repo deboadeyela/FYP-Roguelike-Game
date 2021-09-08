@@ -8,8 +8,8 @@ public class Enemy : MovingObject
     public int playerDamage; //Variable for Player Damage
 
     private Animator animator; //Variable for Enemy animations
-    private Transform target; //Target for enemy to hunt
-    private bool skipMove; //used to slow down enemy
+    private Transform playerTarget; //Target for enemy to hunt
+    private bool enemySkip; //used to slow down enemy
     public AudioClip attackSound1; //First of two audio clips to play when attacking the player.
     public AudioClip attackSound2;	//Second of two audio clips to play when attacking the player.
     //private SpriteRenderer spriteRenderer;
@@ -29,7 +29,7 @@ public class Enemy : MovingObject
 
 
         //Lets enemies to know position of player so that the enemies can chase the player
-        target = GameObject.FindGameObjectWithTag("Player").transform; 
+        playerTarget = GameObject.FindGameObjectWithTag("Player").transform; 
 
         base.Start();
     }
@@ -46,15 +46,15 @@ public class Enemy : MovingObject
 
     //Ends enemies turn without movement 
     protected override bool AttemptMove<T>(int xDir, int yDir) {
-        if (skipMove)
+        if (enemySkip && !GameManager.instance.enemiesFaster)
         {
-            skipMove = false;
+            enemySkip = false;
             return false;
         }
 
         base.AttemptMove<T>(xDir, yDir);
 
-        skipMove = true;
+        enemySkip = true;
 
         return true;
 
@@ -75,47 +75,46 @@ public class Enemy : MovingObject
     //AI logic for Enemies
     public void MoveEnemy() {
         //Records direction of player
-        int xDir = 0;
-        int yDir = 0;
+        int xMove = 0;
+        int yMove = 0;
 
    
         if (GameManager.instance.enemiesSmarter) //Checks if flag has been set
         {
             // Calculate the distance from the player to enemy on the x and y axis
-            int xHeading = (int)target.position.x - (int)transform.position.x;
-            int yHeading = (int)target.position.y - (int)transform.position.y;
-            bool moveOnX = false; //Dictates wheher to move horizontal(true) or vertical(false)
+            int xDistance = (int)playerTarget.position.x - (int)transform.position.x;
+            int yDistance = (int)playerTarget.position.y - (int)transform.position.y;
+            bool xMovement = false; //Dictates wheher to move horizontal(true) or vertical(false)
 
             //Check the size of the x and y distances
-            if (Mathf.Abs(xHeading) >= Mathf.Abs(yHeading))
+            if (Mathf.Abs(xDistance) >= Mathf.Abs(yDistance))
             {
-                moveOnX = true;
+                xMovement = true;
             }
             for (int attempt = 0; attempt < 2; attempt++) //Allows for two attempts to find optimal path
             {
                 //if-else block determines which direction the enemy will move in
-                if (moveOnX == true && xHeading < 0)
+                if (xMovement == true && xDistance < 0)
                 {
-                    xDir = -1; yDir = 0;
+                    xMove = -1; yMove = 0;
                 }
-                else if (moveOnX == true && xHeading > 0)
+                else if (xMovement == true && xDistance > 0)
                 {
-                    xDir = 1; yDir = 0;
+                    xMove = 1; yMove = 0;
                 }
-                else if (moveOnX == false && yHeading < 0)
+                else if (xMovement == false && yDistance < 0)
                 {
-                    yDir = -1; xDir = 0;
+                    yMove = -1; xMove = 0;
                 }
-                else if (moveOnX == false && yHeading > 0)
+                else if (xMovement == false && yDistance > 0)
                 {
-                    yDir = 1; xDir = 0;
+                    yMove = 1; xMove = 0;
                 }
                 //Checks if player is hit 
-                Vector2 start = transform.position;
-                Vector2 end = start + new Vector2(xDir, yDir);
+                Vector2 startPosition = transform.position;
+                Vector2 endPosition = startPosition + new Vector2(xMove, yMove);
                 base.boxCollider.enabled = false;
-                RaycastHit2D hit = Physics2D.Linecast(start, end,
-               base.blockingLayer);
+                RaycastHit2D hit = Physics2D.Linecast(startPosition, endPosition, base.blockingLayer);
                 base.boxCollider.enabled = true;
 
                 //Checks what player has hit
@@ -123,14 +122,14 @@ public class Enemy : MovingObject
                 {
                     if (hit.transform.gameObject.tag == "Wall" ||
                    hit.transform.gameObject.tag == "Chest")
-                    {
-                        if (moveOnX == true)
-                            moveOnX = false;
+                    { //Switch boolean values to change direction
+                        if (xMovement == true)
+                            xMovement = false;
                         else
-                            moveOnX = true;
+                            xMovement = true;
                     }
                     else
-                    {
+                    {//If nothing/player is hit, break for-loop and continue game
                         break;
                     }
                 }
@@ -142,13 +141,13 @@ public class Enemy : MovingObject
             //Base AI logic
             //Enemy moves in the x direction towards the player
             //If player and enemy are on the same x coordinate, then enemy moves towards the player in the y direction
-            if (Mathf.Abs(target.position.x - transform.position.x) <
+            if (Mathf.Abs(playerTarget.position.x - transform.position.x) <
            float.Epsilon)
-                yDir = target.position.y > transform.position.y ? 1 : -1;
+                yMove = playerTarget.position.y > transform.position.y ? 1 : -1;
             else
-                xDir = target.position.x > transform.position.x ? 1 : -1;
+                xMove = playerTarget.position.x > transform.position.x ? 1 : -1;
         }
-        AttemptMove<Player>(xDir, yDir);
+        AttemptMove<Player>(xMove, yMove);
 
 
 

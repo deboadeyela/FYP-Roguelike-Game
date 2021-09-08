@@ -10,14 +10,14 @@ public class GameManager : MonoBehaviour
     public float gameStartDelay = 15f;                      //Time to wait before starting level, in seconds.
     public GameObject levelImage;
     private bool doingSetup = false;
-    public float turnDelay = 0.02f;                          //Delay between each Player turn.
+    public float turnDelay = 0.05f;                          //Delay between each Player turn.
     public int playerHealth = 100;                          //Starting value for Player food points.
     public static GameManager instance = null;              //Static instance of GameManager which allows it to be accessed by any other script.
     [HideInInspector] public bool playersTurn = true;       //Boolean to check if it's players turn, hidden in inspector but public.
     private DungeonManager dungeonScript; //Reference to Dungeon
     private Player playerScript; //Reference to Playeer
     private Loader loaderScript; //Reference to Playeer
-    public int enemyHealth = 30;
+    public int enemyHealth = 70;
     //public Text gameText;   //Text to display current level number.
     private Text subText;
     private Text levelText;
@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour
     private bool playerInDungeon;
     public bool enemiesFaster = false;
     public bool enemiesSmarter = false;
-    public int enemySpawnRatio = 80;
+    public int enemySpawnRatio = 100;
     public int exploredDungeons = 0;
     public int enemiesKilled = 0;
     public int playerScore = 0;
@@ -99,7 +99,7 @@ public class GameManager : MonoBehaviour
 
         //Set the text of levelText to the string "Day" and append the current level number.
         levelText.text = "FYP Game";
-        subText.text = "\n\n\n- Traverse the world, battle enemies and explore dungeons!\n- Health items can be found by exloring world\n -Armour can be found in chests\n- Armour is ranked in strength by blue = low, green =medium,\nyellow = high, red = very high\n - Steel, gold and diamond swords can be also found in chests\n -Swords are ranked in strength by steel = low, gold = medium, diamond = high. \n-It's much easier to fight enemies with a sword!\n-The stronger you gets the stronger the enemy gets!\n- Enjoy !";
+        subText.text = "\n\n\n- Traverse the world, battle enemies and explore dungeons!\n- Health items can be found by exloring world\n -Armour can be found in chests\n- Armour is ranked in strength by blue = low, green =medium,\nyellow = high, red = very high\n - Steel, gold and diamond swords can be also found in chests\n -Swords are ranked in strength by steel = low, gold = medium, diamond = high.\n -Your player's max Attack & Defense rating is 30\n-It's much easier to fight enemies with a sword!\n-The stronger you gets the stronger the enemy gets!\n- Enjoy !";
         pressText.text = "";
         //Set levelImage to active blocking player's view of the game board during setup.
         levelImage.SetActive(true);
@@ -256,8 +256,8 @@ public class GameManager : MonoBehaviour
             {
                 if ((!enemies[i].GetComponent<SpriteRenderer>().isVisible))
                 {
-                    if (i == enemies.Count - 1)
-                        yield return new WaitForSeconds(enemies[i].moveTime);
+                    if (i == enemies.Count - 1) //if in the dungeon and all enemies are off screen i.e. usually when Player first enters dungeon
+                        yield return new WaitForSeconds(enemies[i].moveTime); //Add time delay for last enemy to avoid jitter affect
                     continue;
                 }
             }
@@ -310,11 +310,12 @@ public class GameManager : MonoBehaviour
         playerScript.dungeonTransition = false;
         playerInDungeon = true;
 
+        //Destroy all enemies from world board
         for (int i = 0; i < enemies.Count; i++)
         {
             Destroy(enemies[i].gameObject);
         }
-        enemies.Clear();
+        enemies.Clear(); 
     }
 
     //Driver for returning to world board
@@ -323,7 +324,7 @@ public class GameManager : MonoBehaviour
         boardScript.SetWorldBoard();
         playerScript.dungeonTransition = false;
         playerInDungeon = false;
-        enemies.Clear();
+        enemies.Clear(); //Clear enemies from list when exiting dungeon
         exploredDungeons++;
     }
 
